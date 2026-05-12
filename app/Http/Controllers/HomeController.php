@@ -8,6 +8,6 @@ class HomeController extends Controller
 {
     function index()
     {
-        return view('home.index');
+        return view('home.index', ['name' => 'Diado Romarender Weng']);
     }
 }
