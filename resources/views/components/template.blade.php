@@ -31,6 +31,15 @@
     </div>
   </nav>
 
+  <div class="container">
+    @if(session('success'))
+      <x-alert type="success">{{ session('success') }}</x-alert>
+    @endif
+    @error('alert')
+      <x-alert type="danger">{{ session('errors')->first('alert') }}</x-alert>
+    @enderror
+  </div>
+
   {{ $slot }}
 
 </body>
