@@ -6,6 +6,7 @@ use App\Models\ArticleComment;
 use Illuminate\Http\Request;
 use App\Models\Article;
 use Illuminate\Support\Str;
+use App\Models\ArticleCategory;
 
 class ArticleController extends Controller
 {
@@ -20,7 +21,8 @@ class ArticleController extends Controller
             $article = Article::create([
                 'slug' => Str::slug($request->title),
                 'title' => $request->title,
-                'content' => $request->input('content')
+                'content' => $request->input('content'),
+                'article_category_id' => $request->article_category_id
             ]);
 
             if ($article) {
@@ -33,7 +35,7 @@ class ArticleController extends Controller
                     'alert' => 'Gagal menyimpan artikel'
                 ]);
         }
-        return view('article.form');
+        return view('article.form', ['article_categories' => ArticleCategory::orderBy('name')->get()]);
     }
 
     function single(string $slug, Request $request)
@@ -56,6 +58,7 @@ class ArticleController extends Controller
             $article->slug = $request->slug;
             $article->title = $request->title;
             $article->content = $request->input('content');
+            $article->article_category_id = $request->article_category_id;
             $article->save();
 
             if ($article) {
@@ -73,6 +76,7 @@ class ArticleController extends Controller
         }
 
         return view('article.form', [
+            'article_categories' => ArticleCategory::orderBy('name')->get(),
             'article' => $article
         ]);
     }
