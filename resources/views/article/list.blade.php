@@ -7,13 +7,13 @@
             </div>
         @endif
         @if ($articles->count() < 10)
-            <a class="btn btn-success" href="{{ route('articles.create') }}">Tambah
+            <a class="btn btn-success" href="{{ route('article.create') }}">Tambah
                 artikel</a>
         @endif
         @foreach($articles as $article)
             <div class="card mt-3">
                 <div class="card-body">
-                    <a href="{{ route('articles.single', ['slug' => $article->slug]) }}">
+                    <a href="{{ route('article.single', ['slug' => $article->slug]) }}">
                         <h5 class="card-title">{{ $article->title }}</h5>
                     </a>
                     <h6 class="card-subtitle mb-2 text-body-secondary">{{

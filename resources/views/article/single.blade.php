@@ -1,10 +1,10 @@
 <x-template>
   <div class="container">
     <div class="mb-3 text-end">
-      <a href="{{ route('articles.edit', ['id' => $article->id]) }}" class="btn
+      <a href="{{ route('article.edit', ['id' => $article->id]) }}" class="btn
 btn-info">Ubah</a>
       <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal">Hapus</button>
-      <a href="{{ route('articles.list') }}" class="btn
+      <a href="{{ route('article.list') }}" class="btn
 btn-secondary">Kembali</a>
     </div>
     <h1>{{ $article->title }}</h5>
@@ -25,7 +25,7 @@ btn-secondary">Kembali</a>
           Apakah Anda yakin akan menghapus artikel?
         </div>
         <div class="modal-footer">
-          <form method="post" action="{{ route('articles.delete', [
+          <form method="post" action="{{ route('article.delete', [
   'id' =>
     $article->id
 ]) }}">

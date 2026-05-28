@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ArticleComment;
 use Illuminate\Http\Request;
 use App\Models\Article;
 use Illuminate\Support\Str;
@@ -23,7 +24,7 @@ class ArticleController extends Controller
             ]);
 
             if ($article) {
-                return redirect()->route('articles.list')
+                return redirect()->route('article.list')
                     ->withSuccess('Artikel berhasil dibuat');
             }
 
@@ -58,7 +59,7 @@ class ArticleController extends Controller
             $article->save();
 
             if ($article) {
-                return redirect()->route('articles.single', [
+                return redirect()->route('article.single', [
                     'slug' =>
                         $article->slug
                 ])
@@ -82,12 +83,31 @@ class ArticleController extends Controller
         if (!$article)
             return abort(404);
         if ($article->delete()) {
-            return redirect()->route('articles.list')
+            return redirect()->route('article.list')
                 ->withSuccess('Artikel telah dihapus');
         }
         return back()->withInput()
             ->withErrors([
                 'alert' => 'Gagal menghapus artikel'
+            ]);
+    }
+
+    function comment(string $id, Request $request)
+    {
+        $article = Article::where('id', $id)->first();
+        if (!$article)
+            return abort(404);
+        $comment = ArticleComment::create([
+            'article_id' => $article->id,
+            'content' => $request->comment
+        ]);
+        if ($comment) {
+            return redirect()->route('article.single', ['slug' => $article->slug])
+                ->withSuccess('Komentar berhasil ditambahkan');
+        }
+        return back()->withInput()
+            ->withErrors([
+                'message' => 'Gagal menambahkan komentar'
             ]);
     }
 }
