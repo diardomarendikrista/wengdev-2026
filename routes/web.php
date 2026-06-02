@@ -15,6 +15,10 @@ Route::controller(\App\Http\Controllers\ArticleController::class)
             'edit'
         )->name('article.edit');
         Route::post('/articles/{id}/delete', 'delete')->name('article.delete');
+    });
+
+Route::controller(\App\Http\Controllers\ArticleCommentController::class)
+    ->group(function () {
         Route::post('/articles/{id}/comment', 'comment')->name('article.comment');
         Route::post('/comments/{id}/delete', 'deleteComment')->name('article.comment.delete');
     });
