@@ -122,4 +122,20 @@ class ArticleController extends Controller
                 'message' => 'Gagal menambahkan komentar'
             ]);
     }
+
+    function deleteComment(string $id, Request $request)
+    {
+        $comment = ArticleComment::where('id', $id)->first();
+        if (!$comment) {
+            return abort(404);
+        }
+
+        if ($comment->delete()) {
+            return back()->withSuccess('Komentar berhasil dihapus');
+        }
+
+        return back()->withErrors([
+            'message' => 'Gagal menghapus komentar'
+        ]);
+    }
 }

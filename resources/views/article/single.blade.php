@@ -44,27 +44,6 @@ btn-secondary">Kembali</a>
     </div>
   </div>
 
-  <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModal" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header text-bg-danger">
-          <h1 class="modal-title fs-5">Hapus artikel</h1>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          Apakah Anda yakin akan menghapus artikel?
-        </div>
-        <div class="modal-footer">
-          <form method="post" action="{{ route('article.delete', [
-  'id' =>
-    $article->id
-]) }}">
-            @csrf
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-            <button type="submit" class="btn btn-primary">Hapus</button>
-          </form>
-        </div>
-      </div>
-    </div>
-  </div>
+  <x-confirm-modal id="deleteModal" title="Hapus artikel" action="{{ route('article.delete', ['id' => $article->id]) }}"
+    message="Apakah Anda yakin akan menghapus artikel?" />
 </x-template>
