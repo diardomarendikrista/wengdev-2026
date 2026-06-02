@@ -9,9 +9,14 @@
         <a class="btn btn-success mb-3" href="{{ route('article.create') }}">Tambah artikel</a>
 
         <form action="{{ route('article.list') }}" method="GET" class="mb-3 mt-3 d-flex gap-2">
-            <input type="text" name="search" class="form-control" placeholder="Cari artikel dari judul atau konten..."
-                value="{{ request('search') }}">
-            <button type="submit" class="btn btn-primary">Cari</button>
+            <input type="text" name="search" class="form-control flex-grow-1"
+                placeholder="Cari artikel dari judul atau konten..." value="{{ request('search') }}">
+            <select name="sort" class="form-select w-auto">
+                <option value="">Urutkan (Default)</option>
+                <option value="asc" {{ request('sort') == 'asc' ? 'selected' : '' }}>Nama A-Z</option>
+                <option value="desc" {{ request('sort') == 'desc' ? 'selected' : '' }}>Nama Z-A</option>
+            </select>
+            <button type="submit" class="btn btn-primary">Terapkan</button>
         </form>
 
         @foreach($articles as $article)

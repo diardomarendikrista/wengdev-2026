@@ -20,6 +20,10 @@ class ArticleController extends Controller
                 ->orWhere('content', 'like', "%{$search}%");
         }
 
+        if ($request->has('sort') && in_array($request->sort, ['asc', 'desc'])) {
+            $query->orderBy('title', $request->sort);
+        }
+
         $articles = $query->get();
         return view('article.list', ['articles' => $articles]);
     }
