@@ -16,8 +16,5 @@ class ArticleCategorySeeder extends Seeder
         ArticleCategory::create(['name' => 'Olah raga']);
         ArticleCategory::create(['name' => 'Politik']);
         ArticleCategory::create(['name' => 'Sosial']);
-        ArticleCategory::create(['name' => 'Ekonomi']);
-        ArticleCategory::create(['name' => 'Teknologi']);
-        ArticleCategory::create(['name' => 'Hiburan']);
     }
 }

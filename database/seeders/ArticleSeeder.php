@@ -14,11 +14,14 @@ class ArticleSeeder extends Seeder
      */
     public function run(): void
     {
-        Article::factory()->count(5)
+        Article::factory()->count(30)
             ->longerContent(20)
             ->slugFromTitle()
-            // ->has(ArticleComment::factory()->count(10), 'comments')
-            ->hasComments(20)
-            ->create();
+            ->create()
+            ->each(function ($article) {
+                ArticleComment::factory()
+                    ->count(rand(10, 20))
+                    ->create(['article_id' => $article->id]);
+            });
     }
 }
