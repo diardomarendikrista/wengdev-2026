@@ -12,7 +12,15 @@ class ArticleController extends Controller
 {
     function list(Request $request)
     {
-        $articles = Article::get();
+        $query = Article::query();
+
+        if ($request->has('search') && $request->search != '') {
+            $search = $request->search;
+            $query->where('title', 'like', "%{$search}%")
+                ->orWhere('content', 'like', "%{$search}%");
+        }
+
+        $articles = $query->get();
         return view('article.list', ['articles' => $articles]);
     }
     function create(Request $request)

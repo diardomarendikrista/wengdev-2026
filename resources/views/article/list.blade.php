@@ -6,10 +6,14 @@
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
         @endif
-        @if ($articles->count() < 10)
-            <a class="btn btn-success" href="{{ route('article.create') }}">Tambah
-                artikel</a>
-        @endif
+        <a class="btn btn-success mb-3" href="{{ route('article.create') }}">Tambah artikel</a>
+
+        <form action="{{ route('article.list') }}" method="GET" class="mb-3 mt-3 d-flex gap-2">
+            <input type="text" name="search" class="form-control" placeholder="Cari artikel dari judul atau konten..."
+                value="{{ request('search') }}">
+            <button type="submit" class="btn btn-primary">Cari</button>
+        </form>
+
         @foreach($articles as $article)
             <div class="card mt-3">
                 <div class="card-body">
