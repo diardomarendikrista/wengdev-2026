@@ -43,4 +43,21 @@ class ArticleCommentController extends Controller
             'message' => 'Gagal menghapus komentar'
         ]);
     }
+
+    function editComment(string $id, Request $request)
+    {
+        $comment = ArticleComment::where('id', $id)->first();
+        if (!$comment) {
+            return abort(404);
+        }
+
+        $comment->content = $request->input('content');
+        if ($comment->save()) {
+            return back()->withSuccess('Komentar berhasil diubah');
+        }
+
+        return back()->withErrors([
+            'message' => 'Gagal mengubah komentar'
+        ]);
+    }
 }
