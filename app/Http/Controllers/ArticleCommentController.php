@@ -12,12 +12,19 @@ class ArticleCommentController extends Controller
     function comment(string $id, Request $request)
     {
         $article = Article::where('id', $id)->first();
+
         if (!$article)
             return abort(404);
+
+        $request->validate([
+            'comment' => ['required', 'string', 'max:2000']
+        ]);
+
         $comment = ArticleComment::create([
             'article_id' => $article->id,
             'content' => $request->comment
         ]);
+
         if ($comment) {
             return redirect()->route('article.single', ['slug' => $article->slug])
                 ->withSuccess('Komentar berhasil ditambahkan');

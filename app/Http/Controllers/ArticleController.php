@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Article;
 use Illuminate\Support\Str;
 use App\Models\ArticleCategory;
+use Illuminate\Validation\Rule;
 
 class ArticleController extends Controller
 {
@@ -29,9 +30,22 @@ class ArticleController extends Controller
     }
     function create(Request $request)
     {
+        $articleCategories = ArticleCategory::orderBy('name')->get();
+
         if ($request->isMethod('post')) {
+            $request->validate([
+                'title' => ['required', 'string', 'max:255', Rule::unique('articles', 'title')],
+                'content' => ['required', 'string', 'max:2000'],
+                'article_category_id' => ['required', 'integer', Rule::in($articleCategories->pluck('id'))]
+            ]);
+
+            $slug = Str::slug($request->title);
+            if (Article::where('slug', '=', $slug)->exists()) {
+                $slug .= '-' . uniqid();
+            }
+
             $article = Article::create([
-                'slug' => Str::slug($request->title),
+                'slug' => $slug,
                 'title' => $request->title,
                 'content' => $request->input('content'),
                 'article_category_id' => $request->article_category_id
@@ -47,7 +61,7 @@ class ArticleController extends Controller
                     'alert' => 'Gagal menyimpan artikel'
                 ]);
         }
-        return view('article.form', ['article_categories' => ArticleCategory::orderBy('name')->get()]);
+        return view('article.form', ['article_categories' => $articleCategories]);
     }
 
     function single(string $slug, Request $request)
@@ -64,9 +78,19 @@ class ArticleController extends Controller
     function edit(string $id, Request $request)
     {
         $article = Article::where('id', $id)->first();
+        $articleCategories = ArticleCategory::orderBy('name')->get();
+
         if (!$article)
             return abort(404);
+
         if ($request->isMethod('post')) {
+            $request->validate([
+                'title' => ['required', 'string', 'max:255', Rule::unique('articles', 'title')->ignore($article->id)],
+                'content' => ['required', 'string', 'max:2000'],
+                'article_category_id' => ['required', 'integer', Rule::in($articleCategories->pluck('id'))],
+                'slug' => ['required', 'string', Rule::unique('articles')->ignore($article->id)],
+            ]);
+
             $article->slug = $request->slug;
             $article->title = $request->title;
             $article->content = $request->input('content');
@@ -88,7 +112,7 @@ class ArticleController extends Controller
         }
 
         return view('article.form', [
-            'article_categories' => ArticleCategory::orderBy('name')->get(),
+            'article_categories' => $articleCategories,
             'article' => $article
         ]);
     }
