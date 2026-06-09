@@ -18,7 +18,7 @@
         aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
-      <div class="collapse navbar-collapse" id="navbarNav">
+      <div class="collapse navbar-collapse justify-content-between" id="navbarNav">
         <ul class="navbar-nav">
           <li class="nav-item">
             <a class="nav-link active" aria-current="page" href={{ route('home') }}>Home</a>
@@ -27,6 +27,25 @@
             <a class="nav-link" href={{ route('article.list') }}>Artikel</a>
           </li>
         </ul>
+
+        @auth
+          <div class="dropdown">
+            <button class="btn dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+              {{ auth()->user()->name }}
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end ">
+              <li>
+                <form id="logout-form" action="{{ route('logout') }}" method="POST">
+                  @csrf
+                  <button type="submit" class="dropdown-item">Keluar</button>
+                </form>
+              </li>
+            </ul>
+          </div>
+        @else
+          <a href="{{ route('login') }}" class="btn btn-outline-primary">Masuk</a>
+        @endauth
+
       </div>
     </div>
   </nav>
