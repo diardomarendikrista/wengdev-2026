@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\ArticleComment;
 use Illuminate\Http\Request;
 use App\Models\Article;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Str;
-use App\Models\ArticleCategory;
 use Illuminate\Validation\Rule;
 
 class ArticleController extends Controller
@@ -30,7 +29,7 @@ class ArticleController extends Controller
     }
     function create(Request $request)
     {
-        $articleCategories = ArticleCategory::orderBy('name')->get();
+        $articleCategories = $request->articleCategories;
 
         if ($request->isMethod('post')) {
             $request->validate([
@@ -78,7 +77,7 @@ class ArticleController extends Controller
     function edit(string $id, Request $request)
     {
         $article = Article::where('id', $id)->first();
-        $articleCategories = ArticleCategory::orderBy('name')->get();
+        $articleCategories = $request->articleCategories;
 
         if (!$article)
             return abort(404);
@@ -113,7 +112,7 @@ class ArticleController extends Controller
 
         return view('article.form', [
             'article_categories' => $articleCategories,
-            'article' => $article
+            'article' => $article,
         ]);
     }
 

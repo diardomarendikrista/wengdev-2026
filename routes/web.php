@@ -1,18 +1,25 @@
 <?php
 
+use App\Enums\UserRoleEnum;
+use App\Http\Middleware\EnsureArticleCategoryExists;
+use App\Http\Middleware\EnsureUserRole;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [\App\Http\Controllers\HomeController::class, 'index'])->middleware('auth')->name('home');
 
-Route::controller(\App\Http\Controllers\ArticleController::class)->middleware('auth')->group(function () {
+Route::controller(\App\Http\Controllers\ArticleController::class)->middleware(['auth', 'has_article_category'])->group(function () {
     Route::get('/articles', 'list')->name('article.list');
-    Route::match(['get', 'post'], '/articles/create', 'create')->name('article.create');
+    Route::match(['get', 'post'], '/articles/create', 'create')
+        ->name('article.create')
+        ->middleware('role:' . UserRoleEnum::Administrator->value . ',' . UserRoleEnum::Author->value);
     Route::get('/articles/{slug}', 'single')->name('article.single');
     Route::match(
         ['get', 'post'],
         '/articles/{id}/edit',
         'edit'
-    )->name('article.edit');
+    )
+        ->name('article.edit')
+        ->middleware('role:' . UserRoleEnum::Administrator->value . ',' . UserRoleEnum::Author->value);
     Route::post('/articles/{id}/delete', 'delete')->name('article.delete');
 });
 

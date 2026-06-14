@@ -5,7 +5,7 @@
             @isset($article)
                 <x-form.group for="slug" label="Slug">
                     <input type="text" name="slug" id="slug" class="form-control"
-                        value="{{ old('slug') ?? $article->slug ?? '' }}" required>
+                        value="{{ old('slug') ?? $article->slug ?? '' }}" required @can('isAuthor') readonly @endcan>
                 </x-form.group>
             @endisset
             <x-form.group for="title" label="Judul">
