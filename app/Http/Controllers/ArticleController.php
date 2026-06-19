@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 use App\Models\Article;
-use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 
@@ -51,6 +52,9 @@ class ArticleController extends Controller
             ]);
 
             if ($article) {
+                $users = User::inRandomOrder()->limit(5)->get();
+                Mail::to($users)->send(new \App\Mail\ArticlePosted($article));
+
                 return redirect()->route('article.list')
                     ->withSuccess('Artikel berhasil dibuat');
             }
@@ -68,6 +72,10 @@ class ArticleController extends Controller
         $article = Article::where('slug', $slug)->first();
         if (!$article)
             return abort(404);
+
+        if ($request->has('mailable')) {
+            return new \App\Mail\ArticlePosted($article);
+        }
 
         return view('article.single', [
             'article' => $article
